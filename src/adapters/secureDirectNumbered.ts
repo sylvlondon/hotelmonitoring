@@ -4,6 +4,7 @@ import type { CollectResult, HotelConfig } from '../types.js';
 import { CollectError } from '../types.js';
 import { addOneNight } from '../utils/date.js';
 import { isCloudflareChallenge } from '../utils/cloudflare.js';
+import { waitForSelectionAjax, stripHtmlToText } from '../utils/secureDirectAjax.js';
 
 export async function collectSecureDirectNumbered(
   page: Page,
@@ -16,7 +17,7 @@ export async function collectSecureDirectNumbered(
   if (await isCloudflareChallenge(page)) {
     throw new CollectError(
       'CLOUDFLARE_CHALLENGE',
-      'Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.',
+      'Cloudflare Turnstile détecté (anti-bot). Il faut une session validée (cookie cf_clearance) ou un run interactif pour passer le challenge.',
     );
   }
 
@@ -48,7 +49,21 @@ export async function collectSecureDirectNumbered(
     { arrival: targetDate, departure: departureDate },
   );
 
-  await page.waitForTimeout(3_000);
+  // Prefer internal AJAX payload if available (more stable than DOM scraping).
+  const ajax = await waitForSelectionAjax(page);
+  if (ajax?.body) {
+    const text = stripHtmlToText(ajax.body);
+    const parsed = parseSecureDirectNumberedTitles([text]);
+    if (parsed.count > 0) {
+      return {
+        available_rooms_count: parsed.count,
+        available_room_ids_or_categories: parsed.ids.join(','),
+        status: 'ok',
+      };
+    }
+  }
+
+  await page.waitForTimeout(2_000);
 
   const noAvailability = await page
     .locator('text=/plus de disponibilit[eé]s|aucune disponibilit[eé]/i')

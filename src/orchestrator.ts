@@ -11,6 +11,7 @@ import { withRetries } from './utils/retry.js';
 import { insertRecords, getRecordsByRunId } from './storage/sqlite.js';
 import { writeHtmlReport } from './report/htmlReport.js';
 import { captureDebugArtifacts } from './utils/debugArtifacts.js';
+import { addCloudflareClearanceCookie } from './utils/cookies.js';
 
 function buildErrorRecord(
   runId: string,
@@ -95,6 +96,7 @@ export async function runMonitoring(): Promise<void> {
         try {
           const result = await withRetries(async (attempt) => {
             const context = await browser.newContext();
+            await addCloudflareClearanceCookie(context);
             const page = await context.newPage();
             try {
               try {

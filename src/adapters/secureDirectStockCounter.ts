@@ -4,6 +4,7 @@ import type { CollectResult, HotelConfig } from '../types.js';
 import { CollectError } from '../types.js';
 import { addOneNight } from '../utils/date.js';
 import { isCloudflareChallenge } from '../utils/cloudflare.js';
+import { splitCategoryBlocksFromHtml, waitForSelectionAjax } from '../utils/secureDirectAjax.js';
 
 export async function collectSecureDirectStockCounter(
   page: Page,
@@ -16,7 +17,7 @@ export async function collectSecureDirectStockCounter(
   if (await isCloudflareChallenge(page)) {
     throw new CollectError(
       'CLOUDFLARE_CHALLENGE',
-      'Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.',
+      'Cloudflare Turnstile détecté (anti-bot). Il faut une session validée (cookie cf_clearance) ou un run interactif pour passer le challenge.',
     );
   }
 
@@ -44,6 +45,19 @@ export async function collectSecureDirectStockCounter(
     },
     { arrival: targetDate, departure: departureDate },
   );
+
+  const ajax = await waitForSelectionAjax(page);
+  if (ajax?.body) {
+    const blocks = splitCategoryBlocksFromHtml(ajax.body);
+    const parsed = parseSecureDirectStockCounter(blocks, hotel.total_rooms);
+    if (parsed.sumBeforeCap > 0) {
+      return {
+        available_rooms_count: parsed.availableCount,
+        available_room_ids_or_categories: parsed.csv,
+        status: parsed.availableCount > 0 ? 'ok' : 'no_availability',
+      };
+    }
+  }
 
   await page.waitForTimeout(3_000);
 
