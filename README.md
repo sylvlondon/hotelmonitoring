@@ -43,3 +43,4 @@ Workflow: `.github/workflows/daily-monitoring.yml`
 - Déclenchement manuel (`workflow_dispatch`)
 - Exécute tests puis monitoring
 - Publie `output/monitoring.db` et `output/latest-report.html` en artefacts
+- Déploie le rapport sur GitHub Pages (`output/latest-report.html` copié en `index.html`)
