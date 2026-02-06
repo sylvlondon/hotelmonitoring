@@ -1,58 +1,23 @@
 import type { Page } from 'playwright';
-import { DateTime } from 'luxon';
-import { parseThaisRoomTitles } from '../parsers/thaisCalendar.js';
 import type { CollectResult, HotelConfig } from '../types.js';
 import { CollectError } from '../types.js';
 import { addOneNight } from '../utils/date.js';
 
-function frenchMonthTitle(targetDate: string, timezone: string): string {
-  // Ex: "février 2026" (site is fr-FR)
-  const dt = DateTime.fromISO(targetDate, { zone: timezone });
-  return dt.setLocale('fr').toFormat('LLLL yyyy');
-}
+type ThaisConfig = {
+  hotel?: {
+    room_types?: Array<{ id: number; label: string }>;
+  };
+};
 
-async function clickDateInMonth(params: {
-  page: Page;
-  monthTitle: string;
-  day: number;
-}): Promise<boolean> {
-  const { page, monthTitle, day } = params;
-  const dayStr = String(day).padStart(2, '0');
+type ThaisAvailability = {
+  date: string;
+  room_type_id: number;
+  availability: number;
+};
 
-  const month = page
-    .locator('.t__calendar__month')
-    .filter({ has: page.locator('.t__calendar__title', { hasText: monthTitle }) })
-    .first();
-
-  // Click an enabled day cell inside the right month.
-  const cell = month
-    .locator('.t__cell:not(.--disabled):not(.--past):not(.--hidden)')
-    .filter({ has: month.locator('.t__cell__day', { hasText: dayStr }) })
-    .first();
-
-  if (!(await cell.isVisible().catch(() => false))) {
-    return false;
-  }
-
-  await cell.click({ timeout: 10_000 });
-  return true;
-}
-
-async function hasSelectedDates(page: Page): Promise<boolean> {
-  const arrival = await page
-    .locator('button[aria-label="Select start"] .t__search__placeholder')
-    .first()
-    .textContent()
-    .catch(() => '');
-
-  const departure = await page
-    .locator('button[aria-label="Select end"] .t__search__placeholder')
-    .first()
-    .textContent()
-    .catch(() => '');
-
-  // When a date is selected, the placeholder "Quand ?" disappears.
-  return !/Quand\s*\?/i.test(arrival ?? '') && !/Quand\s*\?/i.test(departure ?? '');
+function parseRoomNumber(label: string): string | null {
+  const m = label.trim().match(/^(\d+)\s*-/);
+  return m ? m[1] : null;
 }
 
 export async function collectThaisCalendar(
@@ -62,77 +27,51 @@ export async function collectThaisCalendar(
 ): Promise<CollectResult> {
   const departureDate = addOneNight(targetDate, hotel.timezone);
 
+  // The Thaïs public APIs return 403 to non-browser clients; using Playwright's request context
+  // after a normal page load provides the right headers/cookies.
   await page.goto(hotel.booking_url, { waitUntil: 'domcontentloaded', timeout: 60_000 });
 
-  // Open arrival picker and click arrival day.
-  await page.locator('button[aria-label="Select start"]').first().click().catch(() => null);
+  const base = new URL(hotel.booking_url).origin;
+  const configUrl = `${base}/hub/api/booking-engine/config?&lang=FR`;
+  const availUrl = `${base}/hub/api/booking-engine/availabilities?&from=${targetDate}&to=${departureDate}`;
 
-  const arrivalMonth = frenchMonthTitle(targetDate, hotel.timezone);
-  const arrivalDay = DateTime.fromISO(targetDate, { zone: hotel.timezone }).day;
-  const okArrival = await clickDateInMonth({
-    page,
-    monthTitle: arrivalMonth,
-    day: arrivalDay,
-  });
-
-  // Open departure picker and click departure day.
-  await page.locator('button[aria-label="Select end"]').first().click().catch(() => null);
-
-  const depMonth = frenchMonthTitle(departureDate, hotel.timezone);
-  const depDay = DateTime.fromISO(departureDate, { zone: hotel.timezone }).day;
-  const okDeparture = await clickDateInMonth({ page, monthTitle: depMonth, day: depDay });
-
-  if (!okArrival || !okDeparture) {
-    // Usually means min-stay restriction or disabled day.
-    return {
-      available_rooms_count: 0,
-      available_room_ids_or_categories: '',
-      status: 'no_availability',
-    };
+  const configResp = await page.request.get(configUrl);
+  if (!configResp.ok()) {
+    throw new CollectError('THAIS_API_ERROR', `Config API HTTP ${configResp.status()}`);
+  }
+  const cfg = (await configResp.json()) as ThaisConfig;
+  const roomTypes = cfg.hotel?.room_types ?? [];
+  if (roomTypes.length === 0) {
+    throw new CollectError('THAIS_NO_ROOM_TYPES', 'Config API: room_types introuvables.');
   }
 
-  // Wait a bit for the engine to update.
-  await page.waitForTimeout(3_000);
+  const availResp = await page.request.get(availUrl);
+  if (!availResp.ok()) {
+    throw new CollectError('THAIS_API_ERROR', `Availabilities API HTTP ${availResp.status()}`);
+  }
+  const av = (await availResp.json()) as ThaisAvailability[];
 
-  const selected = await hasSelectedDates(page);
-  if (!selected) {
-    // We clicked but UI did not accept dates.
-    return {
-      available_rooms_count: 0,
-      available_room_ids_or_categories: '',
-      status: 'no_availability',
-    };
+  const availByRoomType = new Map<number, number>();
+  for (const item of av) {
+    if (item.date !== targetDate) continue;
+    const prev = availByRoomType.get(item.room_type_id) ?? 0;
+    availByRoomType.set(item.room_type_id, Math.max(prev, Number(item.availability ?? 0)));
   }
 
-  // Attempt to find the room list titles.
-  const roomTitleLocator = page.locator('h3', { hasText: /^\d+\s*-/ });
-  await roomTitleLocator.first().waitFor({ state: 'visible', timeout: 10_000 }).catch(() => null);
-
-  const titles = await roomTitleLocator.allTextContents();
-  const parsed = parseThaisRoomTitles(titles);
-
-  if (parsed.count === 0) {
-    // Could be a legit no-availability for 1-night stays.
-    const maybeNo = await page
-      .locator('text=/plus de disponibilit[eé]s|aucune disponibilit[eé]s?/i')
-      .first()
-      .isVisible()
-      .catch(() => false);
-
-    if (maybeNo) {
-      return {
-        available_rooms_count: 0,
-        available_room_ids_or_categories: '',
-        status: 'no_availability',
-      };
+  const availableIds: string[] = [];
+  for (const rt of roomTypes) {
+    const stock = availByRoomType.get(rt.id) ?? 0;
+    if (stock > 0) {
+      availableIds.push(parseRoomNumber(rt.label) ?? String(rt.id));
     }
-
-    throw new CollectError('PARSE_EMPTY_THAIS', 'Room list not found after selecting dates.');
   }
+
+  availableIds.sort((a, b) => Number(a) - Number(b));
+  const count = Math.min(availableIds.length, hotel.total_rooms);
 
   return {
-    available_rooms_count: parsed.count,
-    available_room_ids_or_categories: parsed.ids.join(','),
-    status: 'ok',
+    available_rooms_count: count,
+    available_room_ids_or_categories: availableIds.join(','),
+    status: count > 0 ? 'ok' : 'no_availability',
   };
 }
