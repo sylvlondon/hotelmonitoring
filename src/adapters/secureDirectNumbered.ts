@@ -3,6 +3,7 @@ import { parseSecureDirectNumberedTitles } from '../parsers/secureDirectNumbered
 import type { CollectResult, HotelConfig } from '../types.js';
 import { CollectError } from '../types.js';
 import { addOneNight } from '../utils/date.js';
+import { isCloudflareChallenge } from '../utils/cloudflare.js';
 
 export async function collectSecureDirectNumbered(
   page: Page,
@@ -11,6 +12,13 @@ export async function collectSecureDirectNumbered(
 ): Promise<CollectResult> {
   const departureDate = addOneNight(targetDate, hotel.timezone);
   await page.goto(hotel.booking_url, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+
+  if (await isCloudflareChallenge(page)) {
+    throw new CollectError(
+      'CLOUDFLARE_CHALLENGE',
+      'Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.',
+    );
+  }
 
   await page.evaluate(
     ({ arrival, departure }) => {
