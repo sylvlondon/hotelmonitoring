@@ -2,6 +2,7 @@ import { google, sheets_v4 } from 'googleapis';
 import type { SheetRecord } from '../types.js';
 
 const TAB_NAME = process.env.GOOGLE_SHEET_TAB ?? 'monitoring_raw';
+const WEBHOOK_URL = process.env.GOOGLE_SHEET_WEBHOOK_URL;
 
 const HEADERS = [
   'run_id',
@@ -93,14 +94,33 @@ function toRow(r: SheetRecord): (string | number)[] {
   ];
 }
 
-export async function appendRecords(records: SheetRecord[]): Promise<void> {
+async function appendRecordsViaWebhook(records: SheetRecord[]): Promise<void> {
+  if (!WEBHOOK_URL) {
+    throw new Error('Missing GOOGLE_SHEET_WEBHOOK_URL');
+  }
+
+  const response = await fetch(WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      tab_name: TAB_NAME,
+      headers: HEADERS,
+      rows: records.map(toRow),
+    }),
+  });
+
+  if (!response.ok) {
+    const body = await response.text().catch(() => '');
+    throw new Error(
+      `Webhook append failed (${response.status} ${response.statusText}): ${body.slice(0, 500)}`,
+    );
+  }
+}
+
+async function appendRecordsViaServiceAccount(records: SheetRecord[]): Promise<void> {
   const spreadsheetId = process.env.GOOGLE_SHEET_ID;
   if (!spreadsheetId) {
     throw new Error('Missing GOOGLE_SHEET_ID');
-  }
-
-  if (records.length === 0) {
-    return;
   }
 
   const sheets = await buildSheetsClient();
@@ -115,4 +135,17 @@ export async function appendRecords(records: SheetRecord[]): Promise<void> {
       values: records.map(toRow),
     },
   });
+}
+
+export async function appendRecords(records: SheetRecord[]): Promise<void> {
+  if (records.length === 0) {
+    return;
+  }
+
+  if (WEBHOOK_URL) {
+    await appendRecordsViaWebhook(records);
+    return;
+  }
+
+  await appendRecordsViaServiceAccount(records);
 }

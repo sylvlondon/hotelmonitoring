@@ -14,6 +14,7 @@ jobs:
     env:
       LOOKAHEAD_NIGHTS: ${{ vars.LOOKAHEAD_NIGHTS || '7' }}
       TZ: ${{ vars.TZ || 'Europe/Paris' }}
+      GOOGLE_SHEET_WEBHOOK_URL: ${{ secrets.GOOGLE_SHEET_WEBHOOK_URL }}
       GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
       GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
       GOOGLE_SHEET_TAB: monitoring_raw
