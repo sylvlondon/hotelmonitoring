@@ -14,10 +14,8 @@ jobs:
     env:
       LOOKAHEAD_NIGHTS: ${{ vars.LOOKAHEAD_NIGHTS || '7' }}
       TZ: ${{ vars.TZ || 'Europe/Paris' }}
-      GOOGLE_SHEET_WEBHOOK_URL: ${{ secrets.GOOGLE_SHEET_WEBHOOK_URL }}
-      GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
-      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-      GOOGLE_SHEET_TAB: monitoring_raw
+      SQLITE_DB_PATH: output/monitoring.db
+      HTML_REPORT_PATH: output/latest-report.html
 
     steps:
       - name: Guard 07:00 Europe/Paris
@@ -53,3 +51,13 @@ jobs:
       - name: Run monitoring
         if: steps.guard.outputs.skip != 'true'
         run: npm run monitor
+
+      - name: Upload monitoring artifacts
+        if: steps.guard.outputs.skip != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: monitoring-output-${{ github.run_id }}
+          path: |
+            output/monitoring.db
+            output/latest-report.html
+          if-no-files-found: error

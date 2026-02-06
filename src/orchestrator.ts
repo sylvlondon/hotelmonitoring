@@ -6,9 +6,10 @@ import { collectThaisCalendar } from './adapters/thaisCalendar.js';
 import { collectSecureDirectStockCounter } from './adapters/secureDirectStockCounter.js';
 import type { CollectResult, HotelConfig, SheetRecord } from './types.js';
 import { CollectError } from './types.js';
-import { appendRecords } from './sheets/googleSheets.js';
 import { buildTargetDates, formatRunTsLocal } from './utils/date.js';
 import { withRetries } from './utils/retry.js';
+import { insertRecords, getRecordsByRunId } from './storage/sqlite.js';
+import { writeHtmlReport } from './report/htmlReport.js';
 
 function buildErrorRecord(
   runId: string,
@@ -126,6 +127,10 @@ export async function runMonitoring(): Promise<void> {
     await browser.close();
   }
 
-  await appendRecords(records);
-  console.log(`Run ${runId}: ${records.length} lignes append dans Google Sheet.`);
+  insertRecords(records);
+  const thisRunRecords = getRecordsByRunId(runId);
+  const reportPath = writeHtmlReport(thisRunRecords, runId);
+  console.log(
+    `Run ${runId}: ${records.length} lignes inserees dans SQLite. Rapport HTML: ${reportPath}`,
+  );
 }
