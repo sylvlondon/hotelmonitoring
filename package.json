@@ -7,7 +7,8 @@
     "build": "tsc -p tsconfig.json",
     "check": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
-    "monitor": "tsx src/index.ts"
+    "monitor:dev": "tsx src/index.ts",
+    "monitor": "node dist/index.js"
   },
   "dependencies": {
     "better-sqlite3": "^11.9.1",

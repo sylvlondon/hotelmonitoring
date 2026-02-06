@@ -21,7 +21,7 @@ npx playwright install --with-deps chromium
 3. Lancer en local:
 
 ```bash
-npm run monitor
+npm run monitor:dev
 ```
 
 ## Sorties

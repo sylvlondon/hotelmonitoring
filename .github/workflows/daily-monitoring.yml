@@ -62,6 +62,10 @@ jobs:
         if: steps.guard.outputs.skip != 'true'
         run: npm test
 
+      - name: Build
+        if: steps.guard.outputs.skip != 'true'
+        run: npm run build
+
       - name: Install Playwright browsers
         if: steps.guard.outputs.skip != 'true'
         run: |
