@@ -3,315 +3,315 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hotel Monitoring Report - 2bb76d06-6201-4d4d-8c69-7e515ddc461e</title>
+  <title>Hotel Monitoring Report - 00be2cc7-0179-4be8-aa3e-cfa9d18eaee9</title>
   <style>
     :root { color-scheme: light; }
     body { font-family: "IBM Plex Sans", "Segoe UI", sans-serif; margin: 20px; background: #f6f8fb; color: #1f2937; }
-    h1 { margin: 0 0 8px 0; }
-    .meta { margin-bottom: 16px; color: #374151; }
-    .wrap { overflow: auto; border: 1px solid #d1d5db; background: #fff; border-radius: 10px; }
-    table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+    h1 { margin: 0 0 6px 0; }
+    h2 { margin: 0; font-size: 18px; }
+    .meta { margin-bottom: 18px; color: #374151; }
+    .hotel { margin: 14px 0 22px; }
+    .hotel-h { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .sub { color: #4b5563; font-size: 12px; margin-top: 4px; }
+    .stats { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .wrap { overflow: auto; border: 1px solid #d1d5db; background: #fff; border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; min-width: 900px; }
     th, td { border-bottom: 1px solid #e5e7eb; padding: 8px 10px; text-align: left; vertical-align: top; font-size: 13px; }
     thead th { position: sticky; top: 0; background: #eaf1ff; color: #111827; }
     tr:nth-child(even) td { background: #fafafa; }
+    tr.s-error td { background: #fff5f5; }
+    tr.s-ok td { background: #f6fffb; }
+    .badge { display:inline-block; border-radius: 999px; padding: 3px 8px; font-size: 12px; border: 1px solid #d1d5db; background: #fff; }
+    .b-ok { border-color: #86efac; background: #dcfce7; }
+    .b-no_availability { border-color: #e5e7eb; background: #f3f4f6; }
+    .b-error { border-color: #fecaca; background: #fee2e2; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .na { color: #6b7280; }
+    details.err summary { cursor: pointer; color: #991b1b; }
+    details.err pre { margin: 8px 0 0; white-space: pre-wrap; font-size: 12px; color: #111827; background: #fff; border: 1px solid #fecaca; border-radius: 10px; padding: 8px; }
   </style>
 </head>
 <body>
   <h1>Hotel Monitoring Report</h1>
-  <div class="meta">run_id: <code>2bb76d06-6201-4d4d-8c69-7e515ddc461e</code> | rows: <strong>21</strong></div>
+  <div class="meta">run_id: <code>00be2cc7-0179-4be8-aa3e-cfa9d18eaee9</code> | rows: <strong>21</strong></div>
+  <section class="hotel">
+  <header class="hotel-h">
+    <div>
+      <h2>Les Séraphines</h2>
+      <div class="sub">hotel_id: <code>les_seraphines</code> | provider: <code>thais_calendar</code></div>
+    </div>
+    <div class="stats">
+      <span class="badge b-ok">ok: 0</span>
+      <span class="badge b-no_availability">no_availability: 7</span>
+      <span class="badge b-error">error: 0</span>
+    </div>
+  </header>
   <div class="wrap">
     <table>
       <thead>
         <tr>
-          <th>run_id</th>
-          <th>run_ts_local</th>
-          <th>hotel_name</th>
           <th>target_date</th>
-          <th>available_rooms_count</th>
-          <th>total_rooms</th>
-          <th>occupancy_ratio</th>
-          <th>available_room_ids_or_categories</th>
+          <th>available</th>
+          <th>total</th>
+          <th>ratio</th>
+          <th>ids/categories</th>
           <th>status</th>
-          <th>error_code</th>
-          <th>error_message</th>
+          <th>error</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Les Séraphines</td>
-<td>2026-02-06</td>
-<td>0</td>
-<td>5</td>
-<td>0</td>
-<td></td>
-<td>no_availability</td>
-<td></td>
-<td></td>
+        <tr class="s-no_availability">
+  <td class="mono">2026-02-06</td>
+  <td>0</td>
+  <td>5</td>
+  <td>0</td>
+  <td class="mono"></td>
+  <td><span class="badge b-no_availability">no_availability</span></td>
+  <td></td>
 </tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Les Séraphines</td>
-<td>2026-02-07</td>
-<td>0</td>
-<td>5</td>
-<td>0</td>
-<td></td>
-<td>no_availability</td>
-<td></td>
-<td></td>
+<tr class="s-no_availability">
+  <td class="mono">2026-02-07</td>
+  <td>0</td>
+  <td>5</td>
+  <td>0</td>
+  <td class="mono"></td>
+  <td><span class="badge b-no_availability">no_availability</span></td>
+  <td></td>
 </tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Les Séraphines</td>
-<td>2026-02-08</td>
-<td>0</td>
-<td>5</td>
-<td>0</td>
-<td></td>
-<td>no_availability</td>
-<td></td>
-<td></td>
+<tr class="s-no_availability">
+  <td class="mono">2026-02-08</td>
+  <td>0</td>
+  <td>5</td>
+  <td>0</td>
+  <td class="mono"></td>
+  <td><span class="badge b-no_availability">no_availability</span></td>
+  <td></td>
 </tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Les Séraphines</td>
-<td>2026-02-09</td>
-<td>0</td>
-<td>5</td>
-<td>0</td>
-<td></td>
-<td>no_availability</td>
-<td></td>
-<td></td>
+<tr class="s-no_availability">
+  <td class="mono">2026-02-09</td>
+  <td>0</td>
+  <td>5</td>
+  <td>0</td>
+  <td class="mono"></td>
+  <td><span class="badge b-no_availability">no_availability</span></td>
+  <td></td>
 </tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Les Séraphines</td>
-<td>2026-02-10</td>
-<td>0</td>
-<td>5</td>
-<td>0</td>
-<td></td>
-<td>no_availability</td>
-<td></td>
-<td></td>
+<tr class="s-no_availability">
+  <td class="mono">2026-02-10</td>
+  <td>0</td>
+  <td>5</td>
+  <td>0</td>
+  <td class="mono"></td>
+  <td><span class="badge b-no_availability">no_availability</span></td>
+  <td></td>
 </tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Les Séraphines</td>
-<td>2026-02-11</td>
-<td>0</td>
-<td>5</td>
-<td>0</td>
-<td></td>
-<td>no_availability</td>
-<td></td>
-<td></td>
+<tr class="s-no_availability">
+  <td class="mono">2026-02-11</td>
+  <td>0</td>
+  <td>5</td>
+  <td>0</td>
+  <td class="mono"></td>
+  <td><span class="badge b-no_availability">no_availability</span></td>
+  <td></td>
 </tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Les Séraphines</td>
-<td>2026-02-12</td>
-<td>0</td>
-<td>5</td>
-<td>0</td>
-<td></td>
-<td>no_availability</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Maison Pavlov</td>
-<td>2026-02-06</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Maison Pavlov</td>
-<td>2026-02-07</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Maison Pavlov</td>
-<td>2026-02-08</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Maison Pavlov</td>
-<td>2026-02-09</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Maison Pavlov</td>
-<td>2026-02-10</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Maison Pavlov</td>
-<td>2026-02-11</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Maison Pavlov</td>
-<td>2026-02-12</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Villa Victor Louis</td>
-<td>2026-02-06</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Villa Victor Louis</td>
-<td>2026-02-07</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Villa Victor Louis</td>
-<td>2026-02-08</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Villa Victor Louis</td>
-<td>2026-02-09</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Villa Victor Louis</td>
-<td>2026-02-10</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Villa Victor Louis</td>
-<td>2026-02-11</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
-</tr>
-<tr>
-<td>2bb76d06-6201-4d4d-8c69-7e515ddc461e</td>
-<td>2026-02-06T16:54:44.707+01:00</td>
-<td>Villa Victor Louis</td>
-<td>2026-02-12</td>
-<td>0</td>
-<td>8</td>
-<td>0</td>
-<td></td>
-<td>error</td>
-<td>CLOUDFLARE_CHALLENGE</td>
-<td>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</td>
+<tr class="s-no_availability">
+  <td class="mono">2026-02-12</td>
+  <td>0</td>
+  <td>5</td>
+  <td>0</td>
+  <td class="mono"></td>
+  <td><span class="badge b-no_availability">no_availability</span></td>
+  <td></td>
 </tr>
       </tbody>
     </table>
   </div>
+</section>
+<section class="hotel">
+  <header class="hotel-h">
+    <div>
+      <h2>Maison Pavlov</h2>
+      <div class="sub">hotel_id: <code>maison_pavlov</code> | provider: <code>secure_direct_numbered</code></div>
+    </div>
+    <div class="stats">
+      <span class="badge b-ok">ok: 0</span>
+      <span class="badge b-no_availability">no_availability: 0</span>
+      <span class="badge b-error">error: 7</span>
+    </div>
+  </header>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>target_date</th>
+          <th>available</th>
+          <th>total</th>
+          <th>ratio</th>
+          <th>ids/categories</th>
+          <th>status</th>
+          <th>error</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="s-error">
+  <td class="mono">2026-02-06</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-07</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-08</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-09</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-10</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-11</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-12</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<section class="hotel">
+  <header class="hotel-h">
+    <div>
+      <h2>Villa Victor Louis</h2>
+      <div class="sub">hotel_id: <code>villa_victor_louis</code> | provider: <code>secure_direct_stock_counter</code></div>
+    </div>
+    <div class="stats">
+      <span class="badge b-ok">ok: 0</span>
+      <span class="badge b-no_availability">no_availability: 0</span>
+      <span class="badge b-error">error: 7</span>
+    </div>
+  </header>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>target_date</th>
+          <th>available</th>
+          <th>total</th>
+          <th>ratio</th>
+          <th>ids/categories</th>
+          <th>status</th>
+          <th>error</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="s-error">
+  <td class="mono">2026-02-06</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-07</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-08</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-09</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-10</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-11</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+<tr class="s-error">
+  <td class="mono">2026-02-12</td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td><span class="na">N/A</span></td>
+  <td class="mono"></td>
+  <td><span class="badge b-error">error</span></td>
+  <td><details class="err"><summary>CLOUDFLARE_CHALLENGE</summary><pre>Cloudflare Turnstile détecté (anti-bot). Le scraping ne peut pas fonctionner sur GitHub-hosted runners.</pre></details></td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 </body>
 </html>
