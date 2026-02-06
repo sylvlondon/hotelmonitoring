@@ -24,6 +24,7 @@ jobs:
       TZ: ${{ vars.TZ || 'Europe/Paris' }}
       SQLITE_DB_PATH: output/monitoring.db
       HTML_REPORT_PATH: output/latest-report.html
+      DEBUG_ARTIFACTS: '1'
 
     steps:
       - name: Guard 07:00 Europe/Paris
@@ -84,6 +85,7 @@ jobs:
           path: |
             output/monitoring.db
             output/latest-report.html
+            output/debug
           if-no-files-found: error
 
       - name: Prepare Pages content
