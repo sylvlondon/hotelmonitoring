@@ -39,15 +39,17 @@ export async function addCloudflareClearanceCookie(context: BrowserContext): Pro
   const cf = getCfClearance();
   if (!cf) return;
 
-  // Cloudflare clearance cookies are usually scoped to the exact host.
-  const hosts = ['www.secure-direct-hotel-booking.com', 'secure-direct-hotel-booking.com'];
+  // Use `url` to mimic a host-only cookie (often how cf_clearance is set).
+  const urls = [
+    'https://www.secure-direct-hotel-booking.com',
+    'https://secure-direct-hotel-booking.com',
+  ];
 
   await context.addCookies(
-    hosts.map((domain) => ({
+    urls.map((url) => ({
       name: 'cf_clearance',
       value: cf,
-      domain,
-      path: '/',
+      url,
       httpOnly: true,
       secure: true,
       sameSite: 'Lax' as const,
