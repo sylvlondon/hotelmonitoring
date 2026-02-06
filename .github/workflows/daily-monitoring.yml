@@ -59,9 +59,11 @@ jobs:
         if: steps.guard.outputs.skip != 'true'
         run: npm test
 
-      - name: Install Playwright Chromium
+      - name: Install Playwright browsers
         if: steps.guard.outputs.skip != 'true'
-        run: npx playwright install --with-deps chromium
+        run: |
+          npx playwright install --with-deps --force chromium chromium-headless-shell
+          npx playwright install --list
 
       - name: Run monitoring
         if: steps.guard.outputs.skip != 'true'
