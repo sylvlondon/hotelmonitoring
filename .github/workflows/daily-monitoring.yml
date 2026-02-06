@@ -59,6 +59,10 @@ jobs:
         if: steps.guard.outputs.skip != 'true'
         run: npm test
 
+      - name: Install Playwright Chromium
+        if: steps.guard.outputs.skip != 'true'
+        run: npx playwright install --with-deps chromium
+
       - name: Run monitoring
         if: steps.guard.outputs.skip != 'true'
         run: npm run monitor
