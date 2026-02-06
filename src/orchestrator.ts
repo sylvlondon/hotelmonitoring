@@ -10,6 +10,7 @@ import { buildTargetDates, formatRunTsLocal } from './utils/date.js';
 import { withRetries } from './utils/retry.js';
 import { insertRecords, getRecordsByRunId } from './storage/sqlite.js';
 import { writeHtmlReport } from './report/htmlReport.js';
+import { captureDebugArtifacts } from './utils/debugArtifacts.js';
 
 function buildErrorRecord(
   runId: string,
@@ -92,11 +93,23 @@ export async function runMonitoring(): Promise<void> {
     for (const hotel of HOTELS) {
       for (const targetDate of targetDates) {
         try {
-          const result = await withRetries(async () => {
+          const result = await withRetries(async (attempt) => {
             const context = await browser.newContext();
             const page = await context.newPage();
             try {
-              return await collectByProvider(page, hotel, targetDate);
+              try {
+                return await collectByProvider(page, hotel, targetDate);
+              } catch (err) {
+                await captureDebugArtifacts({
+                  page,
+                  hotelId: hotel.hotel_id,
+                  provider: hotel.provider,
+                  targetDate,
+                  attempt,
+                  label: 'collect_error',
+                });
+                throw err;
+              }
             } finally {
               await context.close();
             }
