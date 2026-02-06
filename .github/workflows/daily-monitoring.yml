@@ -16,6 +16,9 @@ jobs:
   monitor:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     env:
       LOOKAHEAD_NIGHTS: ${{ vars.LOOKAHEAD_NIGHTS || '7' }}
       TZ: ${{ vars.TZ || 'Europe/Paris' }}
